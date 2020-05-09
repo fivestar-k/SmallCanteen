@@ -1,29 +1,45 @@
 <template>
-  <div>
+  <div class="detail" v-if="Object.keys(img).length !==0 ">
     <nav-bar class="nav-bar">
       <div slot="left" class="left" @click="backClick"><</div>
       <div slot="center" class="center">{{title}}</div>
     </nav-bar>
-    <div class="top-img">
-      <img :src="img" alt="">
-      <span>{{title}}</span>
-    </div>
+    <scroll class="scroll" ref="scroll">
+      <detail-title
+              :img="img"
+              :tag="tag"/>
+      <detail-content :title="title"
+                      :content="content"
+                      :material="material"/>
+      <detail-step
+              :title="title"
+              :process="process"
+              @imgLoad="imgLoad"/>
+    </scroll>
   </div>
 </template>
 
 <script>
   import { getId } from "../../network/detail";
   import NavBar from "../../components/content/navbar/NavBar";
+  import DetailTitle from "./child/DetailTitle";
+  import DetailContent from "./child/DetailContent";
+  import Scroll from "../../../../surpermall/src/components/common/scroll/Scroll";
+  import DetailStep from "./child/DetailStep";
 
 
   export default {
     name: "Detail",
-    components: {NavBar},
+    components: {DetailStep, Scroll, DetailContent, DetailTitle, NavBar},
     data() {
       return {
         id: null,
         title: '',
-        img: ''
+        img: '',
+        content: '',
+        tag: [],
+        material: [],
+        process: []
       }
     },
     created() {
@@ -36,17 +52,30 @@
           console.log(res);
           this.title = res.result.result.name
           this.img = res.result.result.pic
+          this.content = res.result.result.content
+          this.tag = res.result.result.tag.split(",")
+          this.material = res.result.result.material
+          this.process = res.result.result.process
         })
       },
 
       backClick() {
         this.$router.back()
+      },
+
+      imgLoad() {
+        this.$refs.scroll.refresh()
       }
     }
   }
 </script>
 
 <style scoped>
+  .detail {
+    height: 100vh;
+    /*width: 100vh;*/
+  }
+
   .nav-bar {
     background-color: #FF8198;
     color: #ffffff;
@@ -66,19 +95,8 @@
   /*  margin-left: 62%;*/
   /*}*/
 
-  .top-img {
-    /*vertical-align: text-top;*/
-    /*width: 65%;*/
-    display: flex;
+  .scroll {
+    height: calc(100% - 50px - 52px);
   }
 
-  .top-img img {
-    vertical-align: text-top;
-    flex: 2;
-  }
-
-  .top-img span {
-    padding-left: 10%;
-    flex: 1;
-  }
 </style>

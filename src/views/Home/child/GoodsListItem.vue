@@ -1,8 +1,8 @@
 <template>
-  <div class="goods-list-item">
+  <div class="goods-list-item" v-if="Object.keys(goods).length !== 0">
 <!--    <nav-bar/>-->
     <div v-for="(item, index) in goods" class="item" :key="index" @click="detailClick(index)">
-      <img :src="item.pic" alt="">
+      <img :src="item.pic" alt="" @load="homeImgLoad">
       <span>{{item.name}}</span>
       <div class="content">{{item.content}}</div>
       <i>{{item.cookingtime}}</i>
@@ -14,6 +14,7 @@
 
 <script>
   import NavBar from "../../../components/content/navbar/NavBar";
+
   export default {
     name: "GoodsListItem",
     components: {NavBar},
@@ -25,11 +26,24 @@
         }
       }
     },
+    data() {
+      return {
+        counter: 0,
+        imagesLength: 0
+      }
+    },
     methods: {
       detailClick(index) {
         this.$router.push('detail/' + this.goods[index].id)
+      },
+
+      homeImgLoad() {
+        this.imagesLength = this.goods.length
+        if (++this.counter === this.imagesLength) {
+          this.$bus.$emit('homeImgLoad')
+        }
       }
-    }
+    },
   }
 </script>
 

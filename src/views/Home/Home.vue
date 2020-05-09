@@ -18,12 +18,13 @@
 
 <script>
   import { getClass, getSearch } from "../../network/home";
-  import NavBar from "../../../../smallcanteen/src/components/content/navbar/NavBar";
+  import NavBar from "../../components/content/navbar/NavBar"
   import Swiper from "./child/Swiper";
-  import Search from "./child/Search";
+  import Search from "./child/HomeSearch";
   import ClassIconItem from "./child/ClassIconItem";
   import Scroll from "../../components/common/scroll/Scroll";
   import GoodsList from "./child/GoodsList";
+
 
 
   export default {
@@ -43,15 +44,19 @@
       }
     },
     created() {
-      // this.getClass()
+      // this.getClass()p
       // this.getSearch()
     },
     deactivated() {
       this.saveY = this.$refs.scroll.scroll.y
-      console.log(this.saveY);
     },
     activated() {
       this.$refs.scroll.scroll.scrollTo(0, this.saveY, 500)
+    },
+    mounted() {
+      this.$bus.$on('homeImgLoad', () => {
+        this.$refs.scroll.refresh()
+      })
     },
     methods: {
       getClass() {

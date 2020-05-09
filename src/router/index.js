@@ -6,6 +6,7 @@ const Category = () => import('../views/Category/Category')
 const Love = () => import('../views/love/Love')
 const Profile = () => import('../views/profile/Profile')
 const Detail = () => import('../views/detail/Detail')
+const Search = () => import('../views/search/Search')
 
 Vue.use(VueRouter)
 
@@ -39,6 +40,11 @@ Vue.use(VueRouter)
       path: '/detail/:id',
       name: 'Detail',
       component: Detail
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: Search
     },
   ]
 
